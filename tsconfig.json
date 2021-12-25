@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,    
+    "esModuleInterop": true   
+  },
+  "files": [
+    "./api/controllers/users.ts",
+    "./api/models/user.ts",
+    "./api/routes/login.ts",
+    "./api/routes/user.ts",
+  ]
+}
