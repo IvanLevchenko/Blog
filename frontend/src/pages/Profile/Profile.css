@@ -1,0 +1,77 @@
+.profile-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.profile-header {
+  border: springgreen 2px solid;
+  width: 400px;
+  height: 700px;
+  margin: 10px 0 0 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-header__img {
+  align-self: center  ;
+  border: 1px solid red;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile-header__info {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center ;
+}
+
+.profile-header__info_block {
+  /* width: 40%; */
+  min-width: 150px;
+  height: 50px;
+  border-radius: 55px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.profile-header__info_block img {
+  height: 15px;
+  margin-right: 5px;
+}
+
+.profile-header__info_block:nth-child(1) {
+  border: 2px solid rgb(132, 230, 76);
+  color: rgb(132, 230, 76);
+}
+
+.profile-header__info_block:nth-child(2) {
+  border: 2px solid rgb(236, 221, 82);
+  color: rgb(236, 221, 82);
+}
+
+.profile-header__info_block:nth-child(3) {
+  border: 2px solid rgb(100, 151, 228);
+  color: rgb(100, 151, 228);
+}
+
+.profile-header__info_block:nth-child(4) {
+  border: 2px solid rgb(190, 134, 223);
+  color: rgb(190, 134, 223);
+}
+
+.profile-header__info_block_text {
+  text-align: center;
+}
+
+
+.profile-header__nickname {
+  text-align: center;
+  font-size: 20px;
+}

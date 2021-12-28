@@ -1,11 +1,13 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { setTokenAction } from '../../store/actions/userAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserData } from '../../store/slices/userSlice'
 import { useNavigate } from 'react-router-dom'
 import _axios from '../../axios/axios';
 import { loginUser } from '../../axios/api'
 import './SignIn.css';
 
 export const SignIn: FC = () => {
+  const dispatch = useDispatch()  
   let [loginMode, setLoginMode] = useState<Boolean>(true)
   let [isButtonDisabled, setButtonDisabled] = useState<Boolean>(false)
   let login = useRef<HTMLInputElement>(null)
@@ -27,13 +29,12 @@ export const SignIn: FC = () => {
     try {
       await loginUser(userInfo).then((response) => {
         setButtonDisabled(false)
-        setTokenAction({ token: response.data.token })
-        // console.log(state.getState()
+        dispatch(setUserData(response.data))
         navigate(`/api/v1/user/${response.data.responseObject[0]._id}`)
       })
     } catch(error) {
-      console.error(error)
       setButtonDisabled(false)
+      console.error(error)
     }
   }
 

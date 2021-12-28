@@ -1,4 +1,4 @@
-import './App.css';
+import './index.css';
 import { BrowserRouter, Redirect, Route, Routes } from 'react-router-dom';
 import { Header } from './elements/Header/Header';
 import { SignIn } from './pages/SignIn/SignIn';

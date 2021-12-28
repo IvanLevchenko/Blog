@@ -1,9 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import './Profile.css';
 import _axios from '../../axios/axios'
-import { state } from '../../store/reducers/state';
+import { RootState, state } from '../../store/state';
 import { getUser } from '../../axios/api';
-import { setLoginedUserAction } from '../../store/actions/userAction';
+import { useSelector } from 'react-redux';
+
+//images
+import timeImage from '../../assets/time.svg';
+import calendarImage from '../../assets/calendar.svg';
+import locationImage from '../../assets/location.svg';
+import articleImage from '../../assets/article.svg';
 
 export const Profile: FC = () => {
   interface UserData {
@@ -11,26 +17,39 @@ export const Profile: FC = () => {
     _id: string
   }
 
-  const store = state.getState()
+  const userState = useSelector((state: RootState) => state.user)
   let [userData, setUserData] = useState<UserData>();
 
   useEffect(() => {
     const userId: string | undefined = window.location.href.split('/').at(-1)
-    store.user.then(response=> {
-      document.cookie = 'token=' + response.token;  
-      getUser(response.token, userId).then(response => {
-        setUserData(response.data.user[0])
-      })
-      setLoginedUserAction({ logined: true })
+    getUser(userState.user.token, userId).then(response => {
+      setUserData({...response.data.user[0]})
     })
+
   }, [])
 
   return (
     <div className="profile-wrapper">
       <div className="profile-header">
         <div className="profile-header__img"><img src="" alt="avatar" /></div>
+        <p className="profile-header__nickname">{userData?.user}</p>
         <div className="profile-header__info">
-          <p className="profile-header__nickname">{userData?.user}</p>
+          <div className="profile-header__info_block">
+            <img src={locationImage} alt="" />
+            <p className="profile-header__info_block_text">Location:</p>
+          </div>
+          <div className="profile-header__info_block">
+            <img src={calendarImage} alt="" />
+            <p className="profile-header__info_block_text">Age:</p>      
+          </div>
+          <div className="profile-header__info_block">
+            <img src={timeImage} alt="" />
+            <p className="profile-header__info_block_text">Registered:</p>
+          </div>
+          <div className="profile-header__info_block">
+            <img src={articleImage} alt="" />
+            <p className="profile-header__info_block_text">Articles:</p>
+          </div>
         </div>
       </div>
       <div className="pofile-body"></div>

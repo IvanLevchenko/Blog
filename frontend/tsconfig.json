@@ -8,5 +8,5 @@
     "jsx": "react-jsx",
     "esModuleInterop": true
   },
-  "include": ["./src/elements", "./src/pages", "./src/store"]
+  "include": ["./src"]
 }

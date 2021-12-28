@@ -1,36 +1,32 @@
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
-import { state } from '../../store/reducers/state';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/state';
+
 
 export const Header: FC = () => {
-  const history = useNavigate()
-  const store = state.getState()
+  const navigate = useNavigate()
   let [isUserLogined, setUserLogined] = useState(false)
-  
-  const checkLoginedUser = (): void => {
-    console.log(store)
-    // store.user.then(response => {
-      // if(response.data.logined) {
-      //   setUserLogined(true)
-      // }
-      // console.log(response)
-    // })
-  }
-  
-  state.subscribe(checkLoginedUser)
+  const userState = useSelector((state: RootState) => state.user)
+  const urlRegExp: RegExp = /\/api\/v1\/user\/.+/
 
-  // state.subscribe(checkLoginedUser)
+  useEffect(() => {
+    if(window.location.href.split(window.location.host)[1].match(urlRegExp)) {
+      setUserLogined(true)
+    }
+  }, [window.location.href])
 
+  
   return (
     <nav className="header">
       <h2>Blog</h2>
       <ul>
-        <li className="header__link" onClick={() => history('/')}>Home</li>
+        <li className="header__link" onClick={() => navigate('/')}>Home</li>
         {isUserLogined 
-        ? <li className="header__link" onClick={() => history('/')}>My profile</li>
-        : <li className="header__link" onClick={() => history('/login')}>Sign In</li>
-        }
+        ? <li className="header__link" onClick={() => navigate(`/api/v1/user/${userState.user.responseObject[0]._id}`)}>My profile</li>
+        : <li className="header__link" onClick={() => navigate('/login')}>Sign In</li>
+      }
       </ul>
     </nav>
   )

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200&family=Nunito:wght@300&family=Playfair+Display&display=swap');
 
 html {
   margin: 0;
@@ -13,5 +13,5 @@ html {
 body {
   margin: 0;
   height: 100%;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Nunito', sans-serif;
 }
