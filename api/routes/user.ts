@@ -1,8 +1,14 @@
 const app = require('express').Router();
 import { Request, Response } from 'express';
 
-const { getUser } = require('../controllers/users.js')
+const { getUser, loginUser, registerUser } = require('../controllers/users.js')
 
 app.get('/get-user', (req: Request, res: Response) => getUser(req, res))
+app.post('/sign-in', (req: Request, res: Response) => loginUser(req, res) )
+app.post('/sign-up', (req: Request, res: Response) => registerUser(req, res))
 
 module.exports = app
+
+
+
+

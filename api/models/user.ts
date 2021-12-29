@@ -3,8 +3,8 @@ import { Schema } from "mongoose";
 const mongoose = require('mongoose');
 
 interface User {
-  user: String,
-  password: String
+  user: string,
+  password: string
 }
 
 const userSchema = new Schema<User>({

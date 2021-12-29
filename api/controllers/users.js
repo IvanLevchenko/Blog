@@ -41,16 +41,18 @@ var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var User = require('../models/index').User;
 var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var enteredUser, enteredPassword, responseObject, token;
+    var user, hashedPassword, responseObject, token;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                enteredUser = req;
-                enteredPassword = crypto.createHash('md5').update(req.body.password).digest('hex');
-                return [4, User.find({ enteredUser: enteredUser, enteredPassword: enteredPassword })];
+                user = req.body.login;
+                hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex');
+                console.log(req.body);
+                return [4, User.findOne({ user: user, hashedPassword: hashedPassword })];
             case 1:
                 responseObject = _a.sent();
-                token = jwt.sign(responseObject[0]._id + '', process.env.SECRET_KEY);
+                console.log(responseObject);
+                token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY);
                 res.status(200).send({ responseObject: responseObject, token: token });
                 return [2];
         }
@@ -64,7 +66,7 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 userToken = req.query.token;
                 generatedToken = jwt.sign(req.query._id, process.env.SECRET_KEY);
                 if (!(userToken == generatedToken)) return [3, 2];
-                return [4, User.find({ _id: req.query._id })];
+                return [4, User.findOne({ _id: req.query._id })];
             case 1:
                 user = _a.sent();
                 res.status(200).send({ user: user });
@@ -73,5 +75,20 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
         }
     });
 }); };
-module.exports = { loginUser: loginUser, getUser: getUser };
+var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var hashedPassword, responseObject;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex');
+                return [4, User.create({ user: req.body.login, password: hashedPassword })];
+            case 1:
+                responseObject = _a.sent();
+                console.log('Created user: ' + responseObject);
+                res.status(200).send({ responseObject: responseObject });
+                return [2];
+        }
+    });
+}); };
+module.exports = { loginUser: loginUser, getUser: getUser, registerUser: registerUser };
 //# sourceMappingURL=users.js.map

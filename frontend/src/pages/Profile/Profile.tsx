@@ -10,11 +10,13 @@ import timeImage from '../../assets/time.svg';
 import calendarImage from '../../assets/calendar.svg';
 import locationImage from '../../assets/location.svg';
 import articleImage from '../../assets/article.svg';
+import defaultUserPhoto from '../../assets/user.svg'
 
 export const Profile: FC = () => {
   interface UserData {
     user: string,
-    _id: string
+    _id: string,
+    photo?: ImageData
   }
 
   const userState = useSelector((state: RootState) => state.user)
@@ -31,7 +33,7 @@ export const Profile: FC = () => {
   return (
     <div className="profile-wrapper">
       <div className="profile-header">
-        <div className="profile-header__img"><img src="" alt="avatar" /></div>
+        <div className="profile-header__img"><img src={userData?.photo ? userData?.photo : defaultUserPhoto} alt="avatar" /></div>
         <p className="profile-header__nickname">{userData?.user}</p>
         <div className="profile-header__info">
           <div className="profile-header__info_block">
@@ -52,7 +54,13 @@ export const Profile: FC = () => {
           </div>
         </div>
       </div>
-      <div className="pofile-body"></div>
+      <div className="profile-body">
+        <div className="profile-body__interactive">
+          <button className="profile-body__interactive-button">Edit profile</button>
+          <button className="profile-body__interactive-button">Log out</button>
+        </div>
+        <div className="profile-body__header"></div> 
+      </div>
     </div>
   )
 }

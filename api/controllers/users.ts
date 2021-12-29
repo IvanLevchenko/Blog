@@ -1,7 +1,6 @@
 require('dotenv').config()
 
 import { Request, Response } from 'express';
-// const express = require('express');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/index');
@@ -13,12 +12,15 @@ interface UserFromDB {
 }
 
 const loginUser = async (req: Request, res: Response) => {
-  const enteredUser = req
-  const enteredPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
+  const user = req.body.login
+  const hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
 
-  let responseObject: UserFromDB[] = await User.find({enteredUser, enteredPassword})
+  console.log(req.body)
 
-  const token = jwt.sign(responseObject[0]._id + '', process.env.SECRET_KEY)
+  let responseObject: UserFromDB = await User.findOne({user, hashedPassword})
+
+  console.log(responseObject)
+  const token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY)
 
   res.status(200).send({responseObject, token})
 }
@@ -28,11 +30,20 @@ const getUser = async (req: Request, res: Response) => {
   const generatedToken = jwt.sign(req.query._id, process.env.SECRET_KEY)
 
   if(userToken == generatedToken) {
-    let user: UserFromDB = await User.find({_id: req.query._id})
+    let user: UserFromDB = await User.findOne({_id: req.query._id})
     res.status(200).send({user})
   }
 
 }
 
-// export = {}
-module.exports = { loginUser, getUser }
+const registerUser = async (req: Request, res: Response) => {
+  const hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
+
+  let responseObject: UserFromDB = await User.create({user: req.body.login, password: hashedPassword})
+
+  console.log('Created user: ' + responseObject)
+
+  res.status(200).send({responseObject})
+}
+
+module.exports = { loginUser, getUser, registerUser }
