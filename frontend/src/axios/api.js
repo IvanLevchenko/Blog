@@ -11,3 +11,9 @@ export const getUser = (token, _id) => {
     headers: { 'Content-Type': 'application/json' }
   })
 }
+
+export const registerUser = (userInfo) => {
+  return _axios.post('/sign-up', JSON.stringify(userInfo), {
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
