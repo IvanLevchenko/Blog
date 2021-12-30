@@ -14,28 +14,32 @@ import defaultUserPhoto from '../../assets/user.svg'
 
 export const Profile: FC = () => {
   interface UserData {
+    password: string,
     user: string,
     _id: string,
-    photo?: ImageData
+    __v: number,
+    image?: Buffer
   }
 
   const userState = useSelector((state: RootState) => state.user)
   let [userData, setUserData] = useState<UserData>();
 
   useEffect(() => {
+    const isTokenExist = document.cookie.split(';').find(cookie => cookie.includes('token='))
     const userId: string | undefined = window.location.href.split('/').at(-1)
+
     getUser(userState.user.token, userId).then(response => {
-      console.log(response)
       setUserData({...response.data.user})
-      console.log(userData)
     })
+
+    console.log(userState)
 
   }, [])
 
   return (
     <div className="profile-wrapper">
       <div className="profile-header">
-        <div className="profile-header__img"><img src={userData?.photo ? userData?.photo : defaultUserPhoto} alt="avatar" /></div>
+        <div className="profile-header__img"><img src={userData?.image ? userData.image : defaultUserPhoto} alt="avatar" /></div>
         <p className="profile-header__nickname">{userData?.user}</p>
         <div className="profile-header__info">
           <div className="profile-header__info_block">

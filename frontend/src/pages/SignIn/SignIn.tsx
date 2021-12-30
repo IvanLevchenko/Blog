@@ -34,7 +34,6 @@ export const SignIn: FC = () => {
         ? {registerResponse, justRegistered: true}
         : {login: login.current!.value, password: password.current!.value}
         ).then((response) => {
-        console.log(response)
         setButtonDisabled(false)
         dispatch(setUserData(response.data))
         navigate(`/api/v1/user/${response.data.responseObject._id}`)

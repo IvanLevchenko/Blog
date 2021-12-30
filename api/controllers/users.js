@@ -41,12 +41,14 @@ var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var User = require('../models/index').User;
 var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, hashedPassword, responseObject, token;
+    var user, hashedPassword, responseObject, token, _id, user;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                console.log(req.body);
+                if (!(req.body.login || req.body.registerResponse)) return [3, 2];
+                user = void 0;
+                hashedPassword = void 0;
                 if ((_a = req.body) === null || _a === void 0 ? void 0 : _a.justRegistered) {
                     user = req.body.registerResponse.user;
                     hashedPassword = req.body.registerResponse.password;
@@ -58,10 +60,17 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4, User.findOne({ user: user, hashedPassword: hashedPassword })];
             case 1:
                 responseObject = _b.sent();
-                console.log(responseObject);
                 token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY);
                 res.status(200).send({ responseObject: responseObject, token: token });
-                return [2];
+                return [3, 4];
+            case 2:
+                _id = jwt.verify(req.body.token, process.env.SECRET_KEY);
+                return [4, User.findOne({ _id: _id })];
+            case 3:
+                user = _b.sent();
+                res.status(200).send({ user: user, token: req.body.token });
+                _b.label = 4;
+            case 4: return [2];
         }
     });
 }); };

@@ -12,24 +12,29 @@ interface UserFromDB {
 }
 
 const loginUser = async (req: Request, res: Response) => {
-  let user;
-  let hashedPassword;
+  if(req.body.login || req.body.registerResponse) {
+    let user;
+    let hashedPassword;
 
-  console.log(req.body)
+    if(req.body?.justRegistered) {
+      user = req.body.registerResponse.user
+      hashedPassword = req.body.registerResponse.password
+    } else {
+      user = req.body.login
+      hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
+    }
 
-  if(req.body?.justRegistered) {
-    user = req.body.registerResponse.user
-    hashedPassword = req.body.registerResponse.password
+    let responseObject: UserFromDB = await User.findOne({user, hashedPassword})
+
+    const token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY)
+
+    res.status(200).send({responseObject, token})
   } else {
-    user = req.body.login
-    hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
+    const _id = jwt.verify(req.body.token, process.env.SECRET_KEY)
+    const user = await User.findOne({_id})
+
+    res.status(200).send({user, token: req.body.token})
   }
-
-  let responseObject: UserFromDB = await User.findOne({user, hashedPassword})
-  console.log(responseObject)
-  const token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY)
-
-  res.status(200).send({responseObject, token})
 }
 
 const getUser = async (req: Request, res: Response) => {
