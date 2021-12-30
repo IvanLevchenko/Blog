@@ -42,15 +42,22 @@ var jwt = require('jsonwebtoken');
 var User = require('../models/index').User;
 var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, hashedPassword, responseObject, token;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                user = req.body.login;
-                hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex');
                 console.log(req.body);
+                if ((_a = req.body) === null || _a === void 0 ? void 0 : _a.justRegistered) {
+                    user = req.body.registerResponse.user;
+                    hashedPassword = req.body.registerResponse.password;
+                }
+                else {
+                    user = req.body.login;
+                    hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex');
+                }
                 return [4, User.findOne({ user: user, hashedPassword: hashedPassword })];
             case 1:
-                responseObject = _a.sent();
+                responseObject = _b.sent();
                 console.log(responseObject);
                 token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY);
                 res.status(200).send({ responseObject: responseObject, token: token });
@@ -84,7 +91,6 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [4, User.create({ user: req.body.login, password: hashedPassword })];
             case 1:
                 responseObject = _a.sent();
-                console.log('Created user: ' + responseObject);
                 res.status(200).send({ responseObject: responseObject });
                 return [2];
         }

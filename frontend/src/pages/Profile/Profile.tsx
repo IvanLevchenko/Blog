@@ -25,7 +25,9 @@ export const Profile: FC = () => {
   useEffect(() => {
     const userId: string | undefined = window.location.href.split('/').at(-1)
     getUser(userState.user.token, userId).then(response => {
-      setUserData({...response.data.user[0]})
+      console.log(response)
+      setUserData({...response.data.user})
+      console.log(userData)
     })
 
   }, [])

@@ -31,7 +31,7 @@ export const SignIn: FC = () => {
     try {
       await loginUser(
         registerResponse?.hasOwnProperty('_id')
-        ? registerResponse
+        ? {registerResponse, justRegistered: true}
         : {login: login.current!.value, password: password.current!.value}
         ).then((response) => {
         console.log(response)

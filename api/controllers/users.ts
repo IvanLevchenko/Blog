@@ -12,13 +12,20 @@ interface UserFromDB {
 }
 
 const loginUser = async (req: Request, res: Response) => {
-  const user = req.body.login
-  const hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
+  let user;
+  let hashedPassword;
 
   console.log(req.body)
 
-  let responseObject: UserFromDB = await User.findOne({user, hashedPassword})
+  if(req.body?.justRegistered) {
+    user = req.body.registerResponse.user
+    hashedPassword = req.body.registerResponse.password
+  } else {
+    user = req.body.login
+    hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
+  }
 
+  let responseObject: UserFromDB = await User.findOne({user, hashedPassword})
   console.log(responseObject)
   const token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY)
 
@@ -40,8 +47,6 @@ const registerUser = async (req: Request, res: Response) => {
   const hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
 
   let responseObject: UserFromDB = await User.create({user: req.body.login, password: hashedPassword})
-
-  console.log('Created user: ' + responseObject)
 
   res.status(200).send({responseObject})
 }
