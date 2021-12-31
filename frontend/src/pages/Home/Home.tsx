@@ -10,12 +10,14 @@ export const Home: FC = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const token = document.cookie.split(';').find(cookie => cookie.includes('token=')).split('token=')[1]
-    loginUser({token}).then(response => {
-      console.log(response)
-      dispatch(setUserData(response.data))
-      navigate(`/api/v1/user/${response.data.user._id}`)
-    })
+    if(document.cookie.length) {
+      const token = document.cookie.split(';').find(cookie => cookie.includes('token=')).split('token=')[1]
+      loginUser({token}).then(response => {
+        console.log(response)
+        dispatch(setUserData(response.data))
+        navigate(`/api/v1/user/${response.data.user._id}`)
+      })
+    }
   }, [])
 
   return (
