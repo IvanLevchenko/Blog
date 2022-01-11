@@ -41,11 +41,12 @@ var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var User = require('../models/index').User;
 var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, hashedPassword, responseObject, token, _id, user;
+    var user, hashedPassword, responseObject, token, _id, user, e_1;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
+                _b.trys.push([0, 5, , 6]);
                 if (!(req.body.login || req.body.registerResponse)) return [3, 2];
                 user = void 0;
                 hashedPassword = void 0;
@@ -70,24 +71,26 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 user = _b.sent();
                 res.status(200).send({ user: user, token: req.body.token });
                 _b.label = 4;
-            case 4: return [2];
+            case 4: return [3, 6];
+            case 5:
+                e_1 = _b.sent();
+                console.log('logining error: ' + e_1);
+                return [3, 6];
+            case 6: return [2];
         }
     });
 }); };
 var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userToken, generatedToken, user;
+    var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                userToken = req.query.token;
-                generatedToken = jwt.sign(req.query._id, process.env.SECRET_KEY);
-                if (!(userToken == generatedToken)) return [3, 2];
+                console.log(req.query.token, req.query._id);
                 return [4, User.findOne({ _id: req.query._id })];
             case 1:
                 user = _a.sent();
                 res.status(200).send({ user: user });
-                _a.label = 2;
-            case 2: return [2];
+                return [2];
         }
     });
 }); };

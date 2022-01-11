@@ -9,11 +9,12 @@ export const Header: FC = () => {
   const navigate = useNavigate()
   let [isUserLogined, setUserLogined] = useState(false)
   const userState = useSelector((state: RootState) => state.user)
-  const urlRegExp: RegExp = /\/api\/v1\/user\/.+/
 
   useEffect(() => {
-    if(window.location.href.split(window.location.host)[1].match(urlRegExp)) {
+    if(document.cookie.split(';').find(cookie => cookie.match(/token=.+/))) {
       setUserLogined(true)
+    } else {
+      setUserLogined(false)
     }
   }, [window.location.href])
 
@@ -21,12 +22,9 @@ export const Header: FC = () => {
   return (
     <nav className="header">
       <h2>Blog</h2>
-      <ul>
-        <li className="header__link" onClick={() => navigate('/')}>Home</li>
-        {isUserLogined 
-        ? <li className="header__link" onClick={() => navigate(`/api/v1/user/${userState.user.responseObject[0]._id}`)}>My profile</li>
-        : <li className="header__link" onClick={() => navigate('/login')}>Sign In</li>
-      }
+      <ul style={{'display': isUserLogined ? 'flex' : 'none'}}>
+        <li className="header__link" onClick={() => navigate('/feed')}>Home</li>
+        <li className="header__link" onClick={() => navigate('/')}>My profile</li>
       </ul>
     </nav>
   )

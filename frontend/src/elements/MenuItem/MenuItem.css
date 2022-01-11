@@ -1,0 +1,30 @@
+.icon {
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.is-active {
+  background: rgb(199, 199, 199) !important;
+}
+
+.menu-item {
+  width: 40px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  /* margin-right: 15px;   */
+  background: none;
+  border-radius: 15px;
+}
+
+.menu-item:hover {
+  background: rgb(231, 231, 231);
+}
+
+input[type="file"] {
+  display: none;
+}

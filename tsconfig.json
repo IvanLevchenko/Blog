@@ -8,9 +8,5 @@
     "allowSyntheticDefaultImports": true,    
     "esModuleInterop": true   
   },
-  "files": [
-    "./api/controllers/users.ts",
-    "./api/models/user.ts",
-    "./api/routes/user.ts",
-  ]
+  "include": ["./api"]
 }

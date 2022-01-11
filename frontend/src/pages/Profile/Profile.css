@@ -155,30 +155,51 @@
   margin-right: 10px;
   cursor: pointer;
   color: white;
-  background: rgb(100, 161, 240);
+  background: none;
   border: none;
   font-size: 15px;
-  border-radius: 6px;
-  box-shadow: inset 0px -10px 8px 1px rgba(90, 90, 90, 0.4);
-  transition: 0.1s;
-            
+  border-radius: 35px;
+  transition: 0.3s;
+  background: rgb(135, 247, 159);
+}
+
+.profile-body__interactive-button:hover {
+  background: rgb(94, 243, 126);
 }
 
 .profile-body__interactive-button:nth-child(2) {
-  background: rgb(240, 94, 94);
+  background: rgb(92, 167, 238);
 }
 
-.profile-body__interactive-button:active {
-  color: rgb(80, 79, 79);
-  box-shadow: inset -4px -4px 15px 5px rgba(90, 90, 90, 0.4),
-              inset 4px 4px 15px 5px rgba(90, 90, 90, 0.4);
-  transition: 0.1s;
+.profile-body__interactive-button:nth-child(2):hover {
+  transition: 0.3s;
+  background: rgb(45, 137, 223);
+}
+
+.profile-body__interactive-button:nth-child(3) {
+  background: rgb(243, 127, 127);
+}
+
+.profile-body__interactive-button:nth-child(3):active {
+  margin-top: 5px;
+}
+
+.profile-body__interactive-button:nth-child(3):hover {
+  background: rgb(238, 94, 94);
 }
 
 .profile-body__header {
   border: 1px solid;
-  width: 100%;  
+  width: 90%;  
   height: 50px;
   position: relative;
+  display: flex;
+}
 
+.profile-body__header p {
+  margin-left: 20px;
+}
+
+.profile-body__header p::after {
+  content: '▴';
 }

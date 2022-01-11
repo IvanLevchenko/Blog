@@ -1,0 +1,15 @@
+.post-wrapper {
+  height: 100%;
+} 
+
+.editor {
+  max-width: 1400px;
+  border: 1px solid rgb(124, 124, 124);
+  position: relative;
+  margin: auto;
+  margin-top: 0;
+}
+
+.ProseMirror {
+  outline: none;
+}

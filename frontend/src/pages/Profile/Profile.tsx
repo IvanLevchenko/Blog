@@ -4,36 +4,42 @@ import _axios from '../../axios/axios'
 import { RootState, state } from '../../store/state';
 import { getUser } from '../../axios/api';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 //images
-import timeImage from '../../assets/time.svg';
-import calendarImage from '../../assets/calendar.svg';
-import locationImage from '../../assets/location.svg';
-import articleImage from '../../assets/article.svg';
-import defaultUserPhoto from '../../assets/user.svg'
+import timeImage from '../../assets/profile/time.svg';
+import calendarImage from '../../assets/profile/calendar.svg';
+import locationImage from '../../assets/profile/location.svg';
+import articleImage from '../../assets/profile/article.svg';
+import defaultUserPhoto from '../../assets/profile/user.svg'
 
 export const Profile: FC = () => {
   interface UserData {
-    password: string,
-    user: string,
+    token: string,
     _id: string,
-    __v: number,
-    image?: Buffer
+    user: string,
+    password: string,
+    img?: string
   }
 
   const navigate = useNavigate()
-
   const userState = useSelector((state: RootState) => state.user)
   let [userData, setUserData] = useState<UserData>();
 
   useEffect(() => {
-    const userId: string | undefined = window.location.href.split('/').at(-1)
+    if(window.location.pathname.match(/api\/v1\/user\/.+/) ) {
+      const userId: string = window.location.href.split('/').at(-1)
+      const token = document.cookie.split(';').filter(cookie => cookie.match(/token=.+/))[0].split('token=')[1]
 
-    getUser(userState.user.token, userId).then(response => {
-      setUserData({...response.data.user})
-      document.cookie = 'token=' + userState.user.token
-    })
+      getUser(token, userId).then(response => {
+        setUserData({...response.data.user})
+      })
+    }
+
+    if(!document.cookie.split(';').find(cookie => cookie.match(/token=.+/))) {
+      navigate('/')
+    }
+
   }, [])
 
   let [isLogout, setLogout] = useState<boolean>(false)
@@ -45,7 +51,7 @@ export const Profile: FC = () => {
 
   const logoutUser = (logout) => {
     if(logout) {
-      const cookie = document.cookie.split(';').filter(cookie => cookie.match(/token=.*/)).join(';')
+      const cookie = document.cookie.split(';').filter(cookie => cookie.match(/token=.+/)).join(';')
       document.cookie = cookie + '; max-age=0'
       return navigate('/')
     }
@@ -64,7 +70,9 @@ export const Profile: FC = () => {
         </div>
       </div>
       <div className="profile-header">
-        <div className="profile-header__img"><img src={userData?.image ? userData.image : defaultUserPhoto} alt="avatar" /></div>
+        <div className="profile-header__img">
+          <img src={userData?.img ? userData?.img : defaultUserPhoto} alt="avatar" />
+        </div>
         <p className="profile-header__nickname">{userData?.user}</p>
         <div className="profile-header__info">
           <div className="profile-header__info_block">
@@ -87,10 +95,19 @@ export const Profile: FC = () => {
       </div>
       <div className="profile-body">
         <div className="profile-body__interactive">
+          <button className="profile-body__interactive-button" 
+            onClick={() => navigate('/create-post')}
+          >
+          Create post
+          </button>
           <button className="profile-body__interactive-button">Edit profile</button>
           <button className="profile-body__interactive-button" onClick={handlePopup}>Log out</button>
         </div>
-        <div className="profile-body__header"></div> 
+        <div className="profile-body__header">
+          <p>By date</p>
+          <p>By size</p>
+          <p>By Rating</p>
+        </div> 
       </div>
     </div>
   )

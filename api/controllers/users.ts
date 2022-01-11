@@ -12,40 +12,40 @@ interface UserFromDB {
 }
 
 const loginUser = async (req: Request, res: Response) => {
-  if(req.body.login || req.body.registerResponse) {
-    let user;
-    let hashedPassword;
+  try {
+    if(req.body.login || req.body.registerResponse) {
+      let user;
+      let hashedPassword;
 
-    if(req.body?.justRegistered) {
-      user = req.body.registerResponse.user
-      hashedPassword = req.body.registerResponse.password
+      if(req.body?.justRegistered) {
+        user = req.body.registerResponse.user
+        hashedPassword = req.body.registerResponse.password
+      } else {
+        user = req.body.login
+        hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
+      }
+
+      let responseObject: UserFromDB = await User.findOne({user, hashedPassword})
+
+      const token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY)
+
+      res.status(200).send({responseObject, token})
     } else {
-      user = req.body.login
-      hashedPassword = crypto.createHash('md5').update(req.body.password).digest('hex')
+      const _id = jwt.verify(req.body.token, process.env.SECRET_KEY)
+      const user = await User.findOne({_id})
+
+      res.status(200).send({user, token: req.body.token})
     }
-
-    let responseObject: UserFromDB = await User.findOne({user, hashedPassword})
-
-    const token = jwt.sign(responseObject._id + '', process.env.SECRET_KEY)
-
-    res.status(200).send({responseObject, token})
-  } else {
-    const _id = jwt.verify(req.body.token, process.env.SECRET_KEY)
-    const user = await User.findOne({_id})
-
-    res.status(200).send({user, token: req.body.token})
+  } catch(e) {
+    console.log('logining error: ' + e)
   }
 }
 
 const getUser = async (req: Request, res: Response) => {
-  const userToken = req.query.token;
-  const generatedToken = jwt.sign(req.query._id, process.env.SECRET_KEY)
+  console.log(req.query.token, req.query._id)
 
-  if(userToken == generatedToken) {
-    let user: UserFromDB = await User.findOne({_id: req.query._id})
-    res.status(200).send({user})
-  }
-
+  let user: UserFromDB = await User.findOne({_id: req.query._id})
+  res.status(200).send({user})
 }
 
 const registerUser = async (req: Request, res: Response) => {

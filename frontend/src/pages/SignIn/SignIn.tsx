@@ -4,16 +4,20 @@ import { setUserData } from '../../store/slices/userSlice'
 import { useNavigate } from 'react-router-dom'
 import _axios from '../../axios/axios';
 import { loginUser, registerUser } from '../../axios/api'
+import { RootState } from '../../store/state';
 import './SignIn.css';
+import { Loader } from '../../elements/Loader/Loader';
 
 export const SignIn: FC = () => {
   const dispatch = useDispatch()  
   let [loginMode, setLoginMode] = useState<Boolean>(true)
   let [isButtonDisabled, setButtonDisabled] = useState<Boolean>(false)
   let [isSignInFailed, setSignInFailed] = useState<Boolean>(false)
+  let [isLoaderShown, setLoaderShown] = useState<Boolean>(true)
   let login = useRef<HTMLInputElement>(null)
   let password = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
+  const userState = useSelector((state: RootState) => state.user)
 
   interface UserRequestResponse {
     user: string,
@@ -22,6 +26,21 @@ export const SignIn: FC = () => {
     __v: number
     img?: string
   }
+
+  useEffect(() => {
+    if(document.cookie.split(';').find(cookie => cookie.match(/token=.+/))) {
+      loginUser({ 
+        token: document.cookie.split(';')
+          .filter(cookie => cookie.match(/token=.+/))[0]
+          .split('token=')[1]
+      }).then(response => {
+        dispatch(setUserData(response.data.user))
+        document.cookie = 'token=' + response.data.token
+        navigate(`/api/v1/user/${response.data.user._id}`)
+        setLoaderShown(false)
+      })
+    }
+  }, [])
 
   const fetchUser = async (e?: React.FormEvent<HTMLButtonElement>, registerResponse?: UserRequestResponse) => {
     if(e) e.preventDefault()
@@ -36,6 +55,7 @@ export const SignIn: FC = () => {
         ).then((response) => {
         setButtonDisabled(false)
         dispatch(setUserData(response.data))
+        document.cookie = 'token=' + response.data.token
         navigate(`/api/v1/user/${response.data.responseObject._id}`)
       })
     } catch(error) {
@@ -57,6 +77,7 @@ export const SignIn: FC = () => {
 
   return (
     <div className="form-wrapper">
+      <Loader isShown={isLoaderShown} />
       <form className="form">
         <div className={`form-alert ${isSignInFailed ? 'show' : ''}`}>Ooops, seems that you try to use incorrect login/password, try again</div>
         <h2>Sign {loginMode ? 'In' : 'Up'}</h2>

@@ -9,16 +9,16 @@ export const Home: FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if(document.cookie.length) {
-      const token = document.cookie.split(';').find(cookie => cookie.includes('token=')).split('token=')[1]
-      loginUser({token}).then(response => {
-        console.log(response)
-        dispatch(setUserData(response.data))
-        navigate(`/api/v1/user/${response.data.user._id}`)
-      })
-    }
-  }, [])
+  // useEffect(() => {
+  //   if(document.cookie.length) {
+  //     const token = document.cookie.split(';').find(cookie => cookie.includes('token=')).split('token=')[1]
+  //     loginUser({token}).then(response => {
+  //       console.log(response)
+  //       dispatch(setUserData(response.data))
+  //       navigate(`/api/v1/user/${response.data.user._id}`)
+  //     })
+  //   }
+  // }, [])
 
   return (
     <div className="home">
