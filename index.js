@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const path = require('path')
 
-const { User } = require('./api/routes')
+const { User, Post } = require('./api/routes')
 const { connectMongo } = require('./db')
 
 app.use(express.json())
 app.use(express.static('./build'))
-app.use('/api/v1', User)
+app.use('/api/v1', User, Post)
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, "./build/index.html"));

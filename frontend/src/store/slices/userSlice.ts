@@ -1,24 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 interface InitialState {
+  token: string,
   user: {
-    token: string,
-    responseObject: {
-      _id: string,
-      user: string,
-      password: string
-    }
+    _id: string,
+    user: string,
+    password: string
   }
 }
 
 const initialState: InitialState = {
+  token: '',
   user: {
-    token: '',
-    responseObject: {
-      _id: '',
-      user: '',
-      password: ''
-    }
+    _id: '',
+    user: '',
+    password: ''
   }
 }
 

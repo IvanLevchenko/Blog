@@ -3,6 +3,7 @@ import { FC, Fragment, useEffect } from 'react';
 import './Menubar.css'
 import { MenuItem } from './../MenuItem/MenuItem'
 
+//icons
 import h1 from '../../assets/menubar/h-1.svg'
 import h2 from '../../assets/menubar/h-2.svg'
 import bold from '../../assets/menubar/bold.svg'
@@ -15,6 +16,10 @@ import separator from '../../assets/menubar/separator.svg'
 import arrowGoBackLine from '../../assets/menubar/arrow-go-back-line.svg'
 import arrowGoForwardLine from '../../assets/menubar/arrow-go-forward-line.svg'
 import imageLine from '../../assets/menubar/image-line.svg'
+import alignCenter from '../../assets/menubar/align-center.svg'
+import alignLeft from '../../assets/menubar/align-left.svg'
+import alignRight from '../../assets/menubar/align-right.svg'
+import alignJustify from '../../assets/menubar/align-justify.svg'
 
 interface Props {
   editor: Editor
@@ -48,10 +53,10 @@ export const Menubar: FC<Props> = ({ editor }) => {
         iconURL: strikethrough
       },
       {
-        icon: 'code-line',
-        title: 'Code',
-        action: () => editor.chain().focus().toggleCode().run(),
-        isActive: () => editor.isActive('code'),
+        icon: 'code-box-line',
+        title: 'Code Block',
+        action: () => editor.chain().focus().toggleCodeBlock().run(),
+        isActive: () => editor.isActive('codeBlock'),
         iconURL: codeLine
       },
       {
@@ -87,6 +92,30 @@ export const Menubar: FC<Props> = ({ editor }) => {
         title: 'Horizontal Rule',
         action: () => editor.chain().focus().setHorizontalRule().run(),
         iconURL: separator
+      },
+      {
+        icon: 'align-left',
+        title: 'Left',
+        action: () => editor.chain().focus().setTextAlign('left').run(),
+        iconURL: alignLeft
+      },
+      {
+        icon: 'align-center',
+        title: 'Center',
+        action: () => editor.chain().focus().setTextAlign('center').run(),
+        iconURL: alignCenter
+      },
+      {
+        icon: 'align-right',
+        title: 'Right',
+        action: () => editor.chain().focus().setTextAlign('right').run(),
+        iconURL: alignRight
+      },
+      {
+        icon: 'align-justify',
+        title: 'Justify',
+        action: () => editor.chain().focus().setTextAlign('justify').run(),
+        iconURL: alignJustify
       },
       {
         icon: 'image-line',

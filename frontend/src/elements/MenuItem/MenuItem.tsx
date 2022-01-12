@@ -1,23 +1,23 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import './MenuItem.css'
 import { Loader } from '../Loader/Loader'
 
 export const MenuItem: FC<any> = ({ icon, title, action, isActive = null, iconURL, isImage }) => {
+  const fileInput = useRef<HTMLInputElement>()
 
-  const getImage = (event) => {
+  const addImage = () => {
     let reader: FileReader = new FileReader()
-    let file: HTMLInputElement = document.querySelector('input[type=file]')
     let url: string | ArrayBuffer 
 
-    reader.onloadend = () => {
+    reader.onload = () => {
       url = reader.result
+      action(url)
     }
 
-    if(file.files[0]) {
-      reader.readAsDataURL(file.files[0])
+    if(fileInput.current.files[0]) {
+      reader.readAsDataURL(fileInput.current.files[0])
     }
 
-    console.log(url)
   }
 
   if(icon) {
@@ -30,7 +30,7 @@ export const MenuItem: FC<any> = ({ icon, title, action, isActive = null, iconUR
           >
             <img src={iconURL} alt="" className="icon" />
           </label>
-          <input type="file" onChange={getImage} id="file-upload" />
+          <input type="file" ref={fileInput} onChange={addImage} id="file-upload" />
         </>
       )
     } else {
