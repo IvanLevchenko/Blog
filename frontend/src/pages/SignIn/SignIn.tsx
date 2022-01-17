@@ -34,10 +34,9 @@ export const SignIn: FC = () => {
           .filter(cookie => cookie.match(/token=.+/))[0]
           .split('token=')[1]
       }).then(response => {
-        dispatch(setUserData(response.data.user))
+        dispatch(setUserData(response.data))
         document.cookie = 'token=' + response.data.token
         navigate(`/api/v1/user/${response.data.user._id}`)
-        setLoaderShown(false)
       })
     }
   }, [])
@@ -54,7 +53,7 @@ export const SignIn: FC = () => {
         : {login: login.current!.value, password: password.current!.value}
         ).then((response) => {
         setButtonDisabled(false)
-        dispatch(setUserData(response.data))
+        dispatch(setUserData({...response.data}))
         document.cookie = 'token=' + response.data.token
         navigate(`/api/v1/user/${response.data.responseObject._id}`)
       })

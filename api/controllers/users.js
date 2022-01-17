@@ -87,7 +87,7 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
             case 0: return [4, User.findOne({ _id: req.query._id })];
             case 1:
                 user = _a.sent();
-                res.status(200).send({ user: user });
+                res.status(200).send({ user: user, token: req.query.token });
                 return [2];
         }
     });

@@ -3,8 +3,7 @@ import './Profile.css';
 import _axios from '../../axios/axios'
 import { RootState, state } from '../../store/state';
 import { getUser } from '../../axios/api';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 //images
 import timeImage from '../../assets/profile/time.svg';
@@ -12,27 +11,32 @@ import calendarImage from '../../assets/profile/calendar.svg';
 import locationImage from '../../assets/profile/location.svg';
 import articleImage from '../../assets/profile/article.svg';
 import defaultUserPhoto from '../../assets/profile/user.svg'
+import { setUserData } from '../../store/slices/userSlice';
+import { useDispatch } from 'react-redux';
 
 export const Profile: FC = () => {
-  interface UserData {
-    token: string,
-    _id: string,
-    user: string,
-    password: string,
-    img?: string
+  interface responseUserData {
+    user: {
+      _id: string,
+      user: string,
+      password: string,
+      img?: string
+    }
+    token: string
   }
-
+  
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const userState = useSelector((state: RootState) => state.user)
-  let [userData, setUserData] = useState<UserData>();
+  let [responseUserData, setResponseUserData] = useState<responseUserData>();
 
   useEffect(() => {
     if(window.location.pathname.match(/api\/v1\/user\/.+/) ) {
       const userId: string = window.location.href.split('/').at(-1)
       const token = document.cookie.split(';').filter(cookie => cookie.match(/token=.+/))[0].split('token=')[1]
-
+      
       getUser(token, userId).then(response => {
-        setUserData({...response.data.user})
+        setResponseUserData({...response.data})
+        dispatch(setUserData(response.data))
       })
     }
 
@@ -43,16 +47,23 @@ export const Profile: FC = () => {
   }, [])
 
   let [isLogout, setLogout] = useState<boolean>(false)
-
+  
   const handlePopup = () => {
     setLogout(!isLogout)
     document.body.style.overflow = !isLogout ? 'hidden' : 'visible'
   }
-
-  const logoutUser = (logout) => {
+  
+  const logoutUser = (logout: boolean) => {
     if(logout) {
-      const cookie = document.cookie.split(';').filter(cookie => cookie.match(/token=.+/)).join(';')
-      document.cookie = cookie + '; max-age=0'
+      let cookies = document.cookie.split(';');
+
+      for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        let eqPos = cookie.indexOf('=');
+        let name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+        document.cookie = name + '=;max-age=0';
+      }
+
       return navigate('/')
     }
     handlePopup()
@@ -71,9 +82,9 @@ export const Profile: FC = () => {
       </div>
       <div className="profile-header">
         <div className="profile-header__img">
-          <img src={userData?.img ? userData?.img : defaultUserPhoto} alt="avatar" />
+          <img src={responseUserData?.user?.img ? responseUserData?.user?.img : defaultUserPhoto} alt="avatar" />
         </div>
-        <p className="profile-header__nickname">{userData?.user}</p>
+        <p className="profile-header__nickname">{responseUserData?.user.user}</p>
         <div className="profile-header__info">
           <div className="profile-header__info_block">
             <img src={locationImage} alt="" />
@@ -100,7 +111,7 @@ export const Profile: FC = () => {
           >
           Create post
           </button>
-          <button className="profile-body__interactive-button">Edit profile</button>
+          <button className="profile-body__interactive-button" onClick={() => navigate(`/edit/${responseUserData.token}`)} >Edit profile</button>
           <button className="profile-body__interactive-button" onClick={handlePopup}>Log out</button>
         </div>
         <div className="profile-body__header">

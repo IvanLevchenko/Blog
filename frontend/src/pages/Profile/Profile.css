@@ -160,15 +160,15 @@
   font-size: 15px;
   border-radius: 35px;
   transition: 0.3s;
-  background: rgb(135, 247, 159);
+  background: rgb(114, 114, 114);
 }
 
 .profile-body__interactive-button:hover {
-  background: rgb(94, 243, 126);
+  background: rgb(57, 192, 86);
 }
 
 .profile-body__interactive-button:nth-child(2) {
-  background: rgb(92, 167, 238);
+  background: rgb(114, 114, 114);
 }
 
 .profile-body__interactive-button:nth-child(2):hover {

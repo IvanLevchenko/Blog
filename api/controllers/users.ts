@@ -43,7 +43,8 @@ const loginUser = async (req: Request, res: Response) => {
 
 const getUser = async (req: Request, res: Response) => {
   let user: UserFromDB = await User.findOne({_id: req.query._id})
-  res.status(200).send({user})
+
+  res.status(200).send({user, token: req.query.token})
 }
 
 const registerUser = async (req: Request, res: Response) => {

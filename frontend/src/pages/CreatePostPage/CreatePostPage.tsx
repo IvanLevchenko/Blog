@@ -27,8 +27,10 @@ export const CreatePostPage: FC = () => {
     content: '<p>Hello World!</p>',
   })
 
-  const sendPost = (): void => {
-    uploadPost({ data: editor.getHTML(), author: stateSelector.user.user })
+  const sendPost = async () => {
+    await uploadPost({ data: editor.getHTML(), author: stateSelector.user.user }).then(response => {
+      console.log(response)
+    })
   }
 
   return (

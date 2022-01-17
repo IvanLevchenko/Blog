@@ -1,0 +1,52 @@
+.popup-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.logout-popup {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(2);
+  filter: brightness(0.5);
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  animation: popup-appear 0.3s ease;
+  animation-fill-mode: forwards;
+}
+
+@keyframes popup-appear {
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    filter: brightness(1);
+  }
+}
+
+.logout-popup button { 
+  margin-left: 5px;
+  background: rgb(100, 161, 240);
+  cursor: pointer;
+  color: white;
+  border: none;
+  height: 30px;
+  min-width: 50px;
+  box-shadow: inset 0px -10px 8px 1px rgba(90, 90, 90, 0.4);
+  border-radius: 3px;
+}
+
+.logout-popup button:nth-child(2) { 
+  background: rgb(240, 94, 94);
+}
+
+.logout-popup button:active {
+  color: rgb(80, 79, 79);
+  box-shadow: inset -4px -4px 15px 5px rgba(90, 90, 90, 0.4),
+              inset 4px 4px 15px 5px rgba(90, 90, 90, 0.4);
+  transition: 0.1s;
+}
